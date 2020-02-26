@@ -27,6 +27,11 @@ const User = db.define('user', {
     get() {
       return () => this.getDataValue('salt')
     }
+  },
+  accountBalance: {
+    type: Sequelize.INTEGER,
+    //Account balance recorded in cents
+    defaultValue: 500000
   }
 })
 
