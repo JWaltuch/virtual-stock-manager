@@ -7,7 +7,8 @@ const Stock = db.define('stock', {
     allowNull: false
   },
   totalQuantity: {
-    type: Sequelize.INTEGER
+    type: Sequelize.INTEGER,
+    allowNull: false
   }
 })
 
