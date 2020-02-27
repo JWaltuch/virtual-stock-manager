@@ -22,7 +22,7 @@ class Portfolio extends Component {
     }
     return (
       <div>
-        <h2>Portfolio: ${portfolioValue}</h2>
+        <h2>Portfolio: ${portfolioValue / 1000}</h2>
         {portfolio ? (
           portfolio.map(stock => <Stock key={stock.id} stock={stock} />)
         ) : (
