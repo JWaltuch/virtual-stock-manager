@@ -41,7 +41,7 @@ router.post('/', async (req, res, next) => {
       const currentUser = await User.findOne({
         where: {id: req.user.id}
       })
-      if (currentUser.accountBalance < currentPrice) {
+      if (currentUser.accountBalance < currentPrice * shares) {
         throw new Error(
           'You do not have enough money in your account to make this purchase.'
         )
