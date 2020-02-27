@@ -15,7 +15,7 @@ const defaultTransactions = []
 /**
  * ACTION CREATORS
  */
-const gotTransactions = user => ({type: GOT_TRANSACTIONS, transactions})
+const gotTransactions = transactions => ({type: GOT_TRANSACTIONS, transactions})
 const addedTransaction = newTransaction => ({
   type: ADDED_TRANSACTION,
   newTransaction
