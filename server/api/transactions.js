@@ -53,10 +53,7 @@ router.post('/', async (req, res, next) => {
           shares,
           currentPrice
         })
-        const newStock = await Stock.create({
-          symbol,
-          totalShares: shares
-        })
+        const newStock = await Stock.findOrUpdate(symbol, shares)
         await newTransaction.setUser(currentUser)
         await newStock.setUser(currentUser)
         // 6. decrease user's accountBalance

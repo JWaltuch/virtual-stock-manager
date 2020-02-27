@@ -12,4 +12,25 @@ const Stock = db.define('stock', {
   }
 })
 
+Stock.findOrUpdate = async function(symbol, totalShares) {
+  let existingStock = await Stock.findOne({
+    where: {
+      symbol: symbol
+    }
+  })
+  if (existingStock) {
+    let newTotalShares = existingStock.totalShares + totalShares
+    await Stock.update(
+      {totalShares: newTotalShares},
+      {where: {id: existingStock.id}}
+    )
+    return existingStock
+  } else {
+    return Stock.create({
+      symbol,
+      totalShares
+    })
+  }
+}
+
 module.exports = Stock
