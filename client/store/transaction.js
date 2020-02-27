@@ -1,5 +1,6 @@
 import axios from 'axios'
 import history from '../history'
+import {getPortfolio} from './portfolio'
 
 /**
  * ACTION TYPES
@@ -28,17 +29,27 @@ export const getTransactions = () => async dispatch => {
   try {
     const res = await axios.get('/api/transactions')
     dispatch(gotTransactions(res.data || defaultTransactions))
+    history.push('/transactions')
   } catch (err) {
     console.error(err)
   }
 }
 
-export const addTransaction = (symbol, shares, type) => async dispatch => {
+export const addTransaction = input => async (dispatch, getState) => {
   let res
   try {
-    res = await axios.post(`/api/transactions`, {symbol, shares, type})
-    dispatch(addedTransaction(res.data))
-    history.push('/transactions')
+    res = await axios.post(`/api/transactions`, input)
+  } catch (inputError) {
+    return dispatch(gotTransactions({error: inputError}))
+  }
+  try {
+    let currentState = getState()
+    if (currentState.transaction.error) {
+      dispatch(getTransactions())
+    } else {
+      dispatch(addedTransaction(res.data))
+      history.push('/transactions')
+    }
   } catch (err) {
     console.error(err)
   }

@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import Portfolio from './portfolio'
+import TransactionForm from './transaction-form'
 
 /**
  * COMPONENT
@@ -18,7 +19,10 @@ export const UserHome = props => {
           <Portfolio />
         </div>
 
-        <h2 className="panel">Account Balance: ${accountBalance}</h2>
+        <h2 className="panel">
+          Account Balance: ${accountBalance / 1000}
+          <TransactionForm />
+        </h2>
       </div>
     </div>
   )

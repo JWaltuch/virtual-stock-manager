@@ -7,9 +7,12 @@ module.exports = router
 
 router.get('/', async (req, res, next) => {
   try {
-    const transactions = await Transaction.findAll({
-      where: {userId: req.user.id}
-    })
+    const transactions = await Transaction.findAll(
+      {
+        where: {userId: req.user.id}
+      },
+      {order: ['id']}
+    )
     res.json(transactions)
   } catch (err) {
     next(err)
@@ -28,13 +31,13 @@ router.post('/', async (req, res, next) => {
       throw new Error('Quantities must be whole numbers.')
     }
     // 2. check if symbol is valid
-    let stockData = await axios.get(
-      `https://cloud.iexapis.com/stable/stock/${symbol}/quote?token=${
-        process.env.IEX_API
-      }`
-    )
-    stockData = stockData.data
-    if (stockData.iexRealtimePrice) {
+    try {
+      let stockData = await axios.get(
+        `https://cloud.iexapis.com/stable/stock/${symbol}/quote?token=${
+          process.env.IEX_API
+        }`
+      )
+      stockData = stockData.data
       // 3. get current price of stock and convert to cents
       let currentPrice = +stockData.iexRealtimePrice * 1000
       // 4. check if user has enough money for purchase
@@ -65,7 +68,7 @@ router.post('/', async (req, res, next) => {
         )
         res.json(newTransaction)
       }
-    } else {
+    } catch (error) {
       throw new Error(`${symbol} is an invalid symbol.`)
     }
   } catch (err) {
