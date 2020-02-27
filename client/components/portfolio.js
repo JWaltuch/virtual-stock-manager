@@ -1,25 +1,33 @@
-import React from 'react'
+import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import {getPortfolio} from '../store/index'
+import {getPortfolio} from '../store/portfolio'
+import {Stock} from './stock'
 
 /**
  * COMPONENT
  */
-export class Portfolio {
+class Portfolio extends Component {
   componentDidMount() {
     this.props.getPortfolio()
   }
 
   render() {
     const {portfolio} = this.props
-    const portfolioValue = portfolio.reduce((stock, total) => {
-      total += stock.value
-      return total
-    }, 0)
+    let portfolioValue = 0
+    if (portfolio) {
+      portfolioValue = portfolio.reduce((total, stock) => {
+        total += stock.value
+        return total
+      }, 0)
+    }
     return (
       <div>
         <h2>Portfolio: ${portfolioValue}</h2>
-        {portfolio.map(stock => <Stock key={stock.id} stock={stock} />)}
+        {portfolio ? (
+          portfolio.map(stock => <Stock key={stock.id} stock={stock} />)
+        ) : (
+          <div>Loading...</div>
+        )}
       </div>
     )
   }
