@@ -19,3 +19,20 @@ form div {
   margin: 1em;
   display: inline-block;
 }
+
+.main-page {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.panel {
+  border: 1px solid black;
+  padding: 20px;
+}
+.line-item {
+  display: flex;
+}
+
+.column {
+  padding: 10px;
+}

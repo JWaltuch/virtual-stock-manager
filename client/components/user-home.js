@@ -13,9 +13,13 @@ export const UserHome = props => {
     <div>
       <h3>Welcome, {email}</h3>
 
-      <Portfolio />
+      <div className="main-page">
+        <div className="panel">
+          <Portfolio />
+        </div>
 
-      <h2>Account Balance: ${accountBalance}</h2>
+        <h2 className="panel">Account Balance: ${accountBalance}</h2>
+      </div>
     </div>
   )
 }
