@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {getPortfolio} from '../store/portfolio'
 import {Stock} from './stock'
+import datesAreSameDay from '../../util'
 
 /**
  * COMPONENT
@@ -9,6 +10,13 @@ import {Stock} from './stock'
 class Portfolio extends Component {
   componentDidMount() {
     this.props.getPortfolio()
+  }
+
+  componentDidUpdate() {
+    let mostRecentUpdate = new Date(this.props.portfolio[0].updatedAt)
+    if (!datesAreSameDay(mostRecentUpdate, new Date())) {
+      this.props.getPortfolio()
+    }
   }
 
   render() {
