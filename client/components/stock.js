@@ -5,9 +5,14 @@ import React from 'react'
  */
 export const Stock = props => {
   const {stock} = props
+  let color = 'equal-to-open'
+  color =
+    stock.openingPrice > stock.value / stock.totalShares
+      ? 'less-than-open'
+      : 'greater-than-open'
 
   return (
-    <div className="line-item">
+    <div className={`line-item ${color}`}>
       <div className="column">{stock.symbol}</div>
       <div className="column">{stock.totalShares} Shares</div>
       <div className="column">${stock.value / 1000}</div>
