@@ -6,10 +6,11 @@ import React from 'react'
 export const Stock = props => {
   const {stock} = props
   let color = 'equal-to-open'
-  color =
-    stock.openingPrice > stock.value / stock.totalShares
-      ? 'less-than-open'
-      : 'greater-than-open'
+  if (stock.openingPrice > stock.value / stock.totalShares) {
+    color = 'less-than-open'
+  } else {
+    color = 'greater-than-open'
+  }
 
   return (
     <div className={`line-item ${color}`}>
