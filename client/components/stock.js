@@ -8,7 +8,7 @@ export const Stock = props => {
   let color = 'equal-to-open'
   if (stock.openingPrice > stock.value / stock.totalShares) {
     color = 'less-than-open'
-  } else {
+  } else if (stock.openingPrice < stock.value / stock.totalShares) {
     color = 'greater-than-open'
   }
 
