@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {getPortfolio} from '../store/portfolio'
 import {Stock} from './stock'
-import datesAreSameDay from '../../util'
+import {updatedWhenMarketOpenedToday} from '../../util'
 
 /**
  * COMPONENT
@@ -13,8 +13,10 @@ class Portfolio extends Component {
   }
 
   componentDidUpdate() {
+    // Checks if portfolio needs dynamic update, based on if
+    // most recent update was when market opened
     let mostRecentUpdate = new Date(this.props.portfolio[0].updatedAt)
-    if (!datesAreSameDay(mostRecentUpdate, new Date())) {
+    if (!updatedWhenMarketOpenedToday(mostRecentUpdate, new Date())) {
       this.props.getPortfolio()
     }
   }
