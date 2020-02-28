@@ -1,8 +1,9 @@
 const router = require('express').Router()
+const axios = require('axios')
 const {Transaction} = require('../db/models')
 const {Stock} = require('../db/models')
 const {User} = require('../db/models')
-const axios = require('axios')
+const {isAfterMarketClose} = require('../../util')
 module.exports = router
 
 router.get('/', async (req, res, next) => {
@@ -39,7 +40,10 @@ router.post('/', async (req, res, next) => {
       )
       stockData = stockData.data
       // 3. get current price of stock and convert to cents
-      let currentPrice = +stockData.iexRealtimePrice * 1000
+      let currentPrice =
+        1000 * isAfterMarketClose(new Date())
+          ? +stockData.latestPrice
+          : +stockData.iexRealtimePrice
       // 4. check if user has enough money for purchase
       const currentUser = await User.findOne({
         where: {id: req.user.id}
@@ -49,24 +53,32 @@ router.post('/', async (req, res, next) => {
           'You do not have enough money in your account to make this purchase.'
         )
       } else {
-        // 5. add transaction
+        // 5. create transaction
         const newTransaction = await Transaction.create({
           type,
           symbol,
           shares,
           currentPrice
         })
-        const newStock = await Stock.findOrUpdate(symbol, shares)
+        // 6. get the opening price for this stock
+        let openingPrice = stockData.previousClose * 1000
+        // 7. create stock
+        const newStock = await Stock.createOrUpdate(
+          symbol,
+          shares,
+          openingPrice
+        )
+        // 8. assign both new stock and transaction to user
         await newTransaction.setUser(currentUser)
         await newStock.setUser(currentUser)
-        // 6. decrease user's accountBalance
+        // 7. decrease user's accountBalance
         await User.update(
           {
             accountBalance: currentUser.accountBalance - currentPrice * shares
           },
           {where: {id: req.user.id}}
         )
-        res.json(newTransaction)
+        res.status(201).json(newTransaction)
       }
     } catch (error) {
       throw new Error(`${symbol} is an invalid symbol.`)
