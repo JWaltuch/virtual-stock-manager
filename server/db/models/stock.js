@@ -28,11 +28,11 @@ Stock.createOrUpdate = async function(symbol, shares, openingPrice) {
   //If found, increase shares, and update opening price
   if (existingStock) {
     let newTotalShares = existingStock.totalShares + shares
-    await Stock.update(
+    const [, updatedStock] = await Stock.update(
       {totalShares: newTotalShares, openingPrice},
-      {where: {id: existingStock.id}}
+      {where: {id: existingStock.id}, returning: true, plain: true}
     )
-    return existingStock
+    return updatedStock
   } else {
     //If not found, create a new stock with passed arguments
     return Stock.create({
