@@ -37,6 +37,7 @@ router.post('/', async (req, res, next) => {
         }`
       )
       stockData = stockData.data
+      console.log('test', stockData)
       // 3. get current price of stock and convert to cents
       let currentPrice = isAfterMarketClose(new Date())
         ? stockData.latestPrice
@@ -78,7 +79,7 @@ router.post('/', async (req, res, next) => {
         res.status(201).json(newTransaction)
       }
     } catch (error) {
-      console.log(error)
+      console.log('ERROR', error)
       throw new Error(`${symbol} is an invalid symbol.`)
     }
   } catch (err) {
