@@ -78,6 +78,7 @@ router.post('/', async (req, res, next) => {
         res.status(201).json(newTransaction)
       }
     } catch (error) {
+      console.log(error)
       throw new Error(`${symbol} is an invalid symbol.`)
     }
   } catch (err) {
