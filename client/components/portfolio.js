@@ -34,7 +34,8 @@ class Portfolio extends Component {
     }
     return (
       <div>
-        <h2>Portfolio: ${portfolioValue}</h2>
+        {/* Prices are recorded accurately but rounded for cleaner display */}
+        <h2>Portfolio: ${portfolioValue.toFixed(2)}</h2>
         {portfolio ? (
           portfolio.map(stock => <Stock key={stock.id} stock={stock} />)
         ) : (
