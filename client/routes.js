@@ -29,6 +29,9 @@ class Routes extends Component {
             <Route path="/home" component={UserHome} />
             <Route path="/portfolio" component={Portfolio} />
             <Route path="/transactions" component={Transactions} />
+            <Route path="/home" component={UserHome} />
+            {/* Displays our Home component as a fallback when logged in*/}
+            <Route component={UserHome} />
           </Switch>
         )}
         {/* Displays our Login component as a fallback */}
