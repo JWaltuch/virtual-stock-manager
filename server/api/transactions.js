@@ -37,7 +37,6 @@ router.post('/', async (req, res, next) => {
         }`
       )
       stockData = stockData.data
-      console.log('test', stockData)
       // 3. get current price of stock and convert to cents
       let currentPrice = isAfterMarketClose(new Date())
         ? stockData.latestPrice
