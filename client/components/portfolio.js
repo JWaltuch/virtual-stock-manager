@@ -15,9 +15,11 @@ class Portfolio extends Component {
   componentDidUpdate() {
     // Checks if portfolio needs dynamic update, based on if
     // most recent update was when market opened
-    let mostRecentUpdate = new Date(this.props.portfolio[0].updatedAt)
-    if (!updatedWhenMarketOpenedToday(mostRecentUpdate, new Date())) {
-      this.props.getPortfolio()
+    if (this.props.portfolio[0]) {
+      let mostRecentUpdate = new Date(this.props.portfolio[0].updatedAt)
+      if (!updatedWhenMarketOpenedToday(mostRecentUpdate, new Date())) {
+        this.props.getPortfolio()
+      }
     }
   }
 
@@ -32,7 +34,7 @@ class Portfolio extends Component {
     }
     return (
       <div>
-        <h2>Portfolio: ${portfolioValue / 1000}</h2>
+        <h2>Portfolio: ${portfolioValue}</h2>
         {portfolio ? (
           portfolio.map(stock => <Stock key={stock.id} stock={stock} />)
         ) : (
