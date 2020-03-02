@@ -53,7 +53,6 @@ router.post('/', async (req, res, next) => {
         )
       } else {
         // 5. create transaction
-        console.log(type, symbol, shares, currentPrice)
         const newTransaction = await Transaction.create({
           type,
           symbol,
@@ -62,7 +61,6 @@ router.post('/', async (req, res, next) => {
         })
         // 6. get the opening price for this stock
         let openingPrice = stockData.previousClose
-        console.log(openingPrice)
         // 7. create stock
         const newStock = await Stock.createOrUpdate(
           symbol,
@@ -82,8 +80,7 @@ router.post('/', async (req, res, next) => {
         res.status(201).json(newTransaction)
       }
     } catch (error) {
-      throw new Error(error)
-      //(`${symbol} is an invalid symbol.`)
+      throw new Error(`${symbol} is an invalid symbol.`)
     }
   } catch (err) {
     next(err)
