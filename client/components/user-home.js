@@ -9,6 +9,7 @@ import TransactionForm from './transaction-form'
  */
 export const UserHome = props => {
   const {email, accountBalance} = props
+  let latestUpdate = new Date().toLocaleString()
 
   return (
     <div>
@@ -25,6 +26,8 @@ export const UserHome = props => {
           <TransactionForm />
         </h2>
       </div>
+
+      <h6 className="footer">Latest Update: {latestUpdate}</h6>
     </div>
   )
 }
