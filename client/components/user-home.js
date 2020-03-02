@@ -20,7 +20,8 @@ export const UserHome = props => {
         </div>
 
         <h2 className="panel">
-          Account Balance: ${accountBalance}
+          {/* Prices are recorded accurately but rounded for cleaner display */}
+          Account Balance: ${parseFloat(accountBalance).toFixed(2)}
           <TransactionForm />
         </h2>
       </div>

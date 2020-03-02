@@ -12,7 +12,9 @@ export const Transaction = props => {
         {transaction.type}: ({transaction.symbol})
       </div>
       <div className="column">
-        {transaction.shares} Share(s) @ ${transaction.currentPrice}
+        {/* Prices are recorded accurately but rounded for cleaner display */}
+        {transaction.shares} Share(s) @ $
+        {parseFloat(transaction.currentPrice).toFixed(2)}
       </div>
     </div>
   )
