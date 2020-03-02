@@ -1,6 +1,7 @@
 const router = require('express').Router()
 const {Stock} = require('../db/models')
 const axios = require('axios')
+const {updatedWhenMarketOpenedToday} = require('../../util')
 module.exports = router
 
 router.get('/', async (req, res, next) => {
@@ -20,6 +21,16 @@ router.get('/', async (req, res, next) => {
             process.env.IEX_API
           }`
         )
+        //Check if opening price has been updated today
+        //If not, get most recent opening price and update
+        if (!updatedWhenMarketOpenedToday(stock.updatedAt, new Date())) {
+          let newOpeningPrice = stockData.data.previousClose * 1000
+
+          await Stock.update(
+            {openingPrice: newOpeningPrice},
+            {where: {id: stock.id}}
+          )
+        }
         stock.dataValues.value =
           stockData.data.iexRealtimePrice * 1000 * +stock.totalShares
         return stock
