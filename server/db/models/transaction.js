@@ -16,7 +16,7 @@ const Transaction = db.define('transaction', {
     values: ['BUY', 'SELL']
   },
   currentPrice: {
-    type: Sequelize.INTEGER
+    type: Sequelize.DECIMAL
   }
 })
 

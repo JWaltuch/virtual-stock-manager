@@ -30,9 +30,8 @@ const User = db.define('user', {
     }
   },
   accountBalance: {
-    type: Sequelize.INTEGER,
-    //Account balance recorded in cents
-    defaultValue: 500000
+    type: Sequelize.DECIMAL,
+    defaultValue: 5000.0
   }
 })
 

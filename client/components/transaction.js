@@ -12,7 +12,7 @@ export const Transaction = props => {
         {transaction.type}: ({transaction.symbol})
       </div>
       <div className="column">
-        {transaction.shares} Share(s) @ ${transaction.currentPrice / 1000}
+        {transaction.shares} Share(s) @ ${transaction.currentPrice}
       </div>
     </div>
   )

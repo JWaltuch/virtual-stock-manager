@@ -40,10 +40,9 @@ router.post('/', async (req, res, next) => {
       )
       stockData = stockData.data
       // 3. get current price of stock and convert to cents
-      let currentPrice =
-        1000 * isAfterMarketClose(new Date())
-          ? +stockData.latestPrice
-          : +stockData.iexRealtimePrice
+      let currentPrice = isAfterMarketClose(new Date())
+        ? stockData.latestPrice
+        : stockData.iexRealtimePrice
       // 4. check if user has enough money for purchase
       const currentUser = await User.findOne({
         where: {id: req.user.id}
@@ -54,6 +53,7 @@ router.post('/', async (req, res, next) => {
         )
       } else {
         // 5. create transaction
+        console.log(type, symbol, shares, currentPrice)
         const newTransaction = await Transaction.create({
           type,
           symbol,
@@ -61,7 +61,8 @@ router.post('/', async (req, res, next) => {
           currentPrice
         })
         // 6. get the opening price for this stock
-        let openingPrice = stockData.previousClose * 1000
+        let openingPrice = stockData.previousClose
+        console.log(openingPrice)
         // 7. create stock
         const newStock = await Stock.createOrUpdate(
           symbol,
@@ -81,7 +82,8 @@ router.post('/', async (req, res, next) => {
         res.status(201).json(newTransaction)
       }
     } catch (error) {
-      throw new Error(`${symbol} is an invalid symbol.`)
+      throw new Error(error)
+      //(`${symbol} is an invalid symbol.`)
     }
   } catch (err) {
     next(err)

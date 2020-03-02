@@ -24,7 +24,7 @@ router.get('/', async (req, res, next) => {
         //Check if opening price has been updated today
         //If not, get most recent opening price and update
         if (!updatedWhenMarketOpenedToday(stock.updatedAt, new Date())) {
-          let newOpeningPrice = stockData.data.previousClose * 1000
+          let newOpeningPrice = stockData.data.previousClose
 
           await Stock.update(
             {openingPrice: newOpeningPrice},
@@ -32,7 +32,7 @@ router.get('/', async (req, res, next) => {
           )
         }
         stock.dataValues.value =
-          stockData.data.iexRealtimePrice * 1000 * +stock.totalShares
+          stockData.data.iexRealtimePrice * +stock.totalShares
         return stock
       } catch (err) {
         next(err)

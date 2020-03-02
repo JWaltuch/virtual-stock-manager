@@ -16,7 +16,7 @@ export const Stock = props => {
     <div className={`line-item ${color}`}>
       <div className="column">{stock.symbol}</div>
       <div className="column">{stock.totalShares} Shares</div>
-      <div className="column">${stock.value / 1000}</div>
+      <div className="column">${stock.value}</div>
     </div>
   )
 }

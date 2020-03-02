@@ -20,7 +20,7 @@ export const UserHome = props => {
         </div>
 
         <h2 className="panel">
-          Account Balance: ${accountBalance / 1000}
+          Account Balance: ${accountBalance}
           <TransactionForm />
         </h2>
       </div>
