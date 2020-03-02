@@ -19,12 +19,12 @@ script:
   - npm run build-client # make the bundle
 before_deploy: # omit node_modules, since we set skip_cleanup below
   - rm -rf node_modules
-deploy: # see README for details on these keys
+deploy:
   # prevents travis from deleting the build
   skip_cleanup: true
   provider: heroku
-  # app should be your heroku app name; see README
+  # app should be your heroku app name
   app: virtual-stock-manager
-  # the secure key indicates an encrypted value; see README
+  # the secure key indicates an encrypted value
   api_key:
     secure: FWSlvYO6+6WTt3p0ZGuuSpQd86QZGAPVj1oXrjO5HOsAOFtGK7VoCZSSCHm561Gb69K7jQslMFjYrwcHtRaXF1iJRyGCshsUSIS5ZWp34nhmHbfGtxFr9wT6ip1jaJBAeGCngjtM8gjEttiej0FghnYczytDbIMYhr0p8M1ijD+nPXYLPo5cnyau3uUIndYvIW83pHsxoHNjoKZDKXBi6d1xaZsxLWK4tDXbGuAS6Qv7S7JWPlra8VFjkudsC6Zp4gKsy4rG8YfhAq9TZ00p+7SMaZ3Shckc0VfBzCZs7mTYcXbMeYbtPcNniUgyS2vM8oYaBMZkjro5YPQip5ETalue6itlOtLzMnNWjGnehnw0MpHqezvczXk01C8/p9s3Nic0+doufVUUPTD3fuy2g3baOx5y12/enDAp9xPNo3QeoN9UC4NDqMO3Nx8AYFQeSEqPTW3C2BfflEgM5N0Q7Pt6r/doEXj3qFGxSSValBYbViHxvPTzmMrPAxaDxOeHRioBs7wqCLXoYYXgaP/C6j/dgCTn+CJa1YcDXeDTE2IBtaOIRz7FXvn0Yf21t6DsMWiFr4OSHetNISCG28es/5hlUBiqja7wMCMADn7eN+0J91EMaOne/RnGvDRtut0GhbiuBaTDY7YeIoHCymA8tjnvYUTzZCBCjHdDLhjrDrc=
