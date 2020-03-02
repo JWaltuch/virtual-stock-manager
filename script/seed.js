@@ -1,27 +1,58 @@
 'use strict'
 
 const db = require('../server/db')
-const {User} = require('../server/db/models')
+const {User, Transaction, Stock} = require('../server/db/models')
 
 async function seed() {
   await db.sync({force: true})
   console.log('db synced!')
 
-  const users = await Promise.all([
-    User.create({
-      name: 'Cody King',
-      email: 'cody@email.com',
-      password: '1234',
-      accountBalance: 90000000
-    }),
-    User.create({
-      name: 'Jim Murphy',
-      email: 'murphy@email.com',
-      password: '1234'
-    })
-  ])
+  const user = await User.create({
+    name: 'Cody King',
+    email: 'cody@email.com',
+    password: '1234',
+    accountBalance: 90000000.0
+  })
 
-  console.log(`seeded ${users.length} users`)
+  let transaction = await Transaction.create({
+    type: 'BUY',
+    symbol: 'aapl',
+    shares: '1',
+    currentPrice: 292.14
+  })
+  await transaction.setUser(user)
+  transaction = await Transaction.create({
+    type: 'BUY',
+    symbol: 'mu',
+    shares: '1',
+    currentPrice: 53.955
+  })
+  await transaction.setUser(user)
+  transaction = await Transaction.create({
+    type: 'BUY',
+    symbol: 'm',
+    shares: '1',
+    currentPrice: 12.81
+  })
+  await transaction.setUser(user)
+  transaction = await Transaction.create({
+    type: 'BUY',
+    symbol: 'aapl',
+    shares: '1',
+    currentPrice: 292.035
+  })
+  await transaction.setUser(user)
+
+  let stock = await Stock.createOrUpdate('aapl', '1', 292.14)
+  await stock.setUser(user)
+  stock = await Stock.createOrUpdate('mu', '1', 53.955)
+  await stock.setUser(user)
+  stock = await Stock.createOrUpdate('m', '1', 12.81)
+  await stock.setUser(user)
+  stock = await Stock.createOrUpdate('aapl', '1', 292.14)
+  await stock.setUser(user)
+
+  console.log(`seeded 1 user, 4 stocks, & 4 transactions`)
   console.log(`seeded successfully`)
 }
 
