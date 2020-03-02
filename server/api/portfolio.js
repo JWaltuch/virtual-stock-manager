@@ -6,12 +6,10 @@ module.exports = router
 
 router.get('/', async (req, res, next) => {
   try {
-    let portfolio = await Stock.findAll(
-      {
-        where: {userId: req.user.id}
-      },
-      {order: ['id']}
-    )
+    let portfolio = await Stock.findAll({
+      where: {userId: req.user.id},
+      order: ['id']
+    })
     //Because promises do not resolve in synchronous map function,
     //catch all promises
     let promises = portfolio.map(async stock => {

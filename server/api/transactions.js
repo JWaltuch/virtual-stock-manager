@@ -8,12 +8,10 @@ module.exports = router
 
 router.get('/', async (req, res, next) => {
   try {
-    const transactions = await Transaction.findAll(
-      {
-        where: {userId: req.user.id}
-      },
-      {order: ['id']}
-    )
+    const transactions = await Transaction.findAll({
+      where: {userId: req.user.id},
+      order: ['id']
+    })
     res.json(transactions)
   } catch (err) {
     next(err)
