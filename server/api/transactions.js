@@ -88,12 +88,9 @@ router.post('/', async (req, res, next) => {
       newTransaction.setUser(currentUser),
       newStock.setUser(currentUser),
       // 7. Decrease user's accountBalance
-      User.update(
-        {
-          accountBalance: currentUser.accountBalance - currentPrice * shares
-        },
-        {where: {id: currentUser.id}}
-      )
+      currentUser.update({
+        accountBalance: currentUser.accountBalance - currentPrice * shares
+      })
     ])
     res.status(201).json(newTransaction)
   } catch (err) {
