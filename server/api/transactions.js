@@ -48,6 +48,14 @@ const getCurrentPrice = stockData => {
     : stockData.iexRealtimePrice
 }
 
+const validateUserCanAffordStock = (user, currentPrice, shares) => {
+  if (user.accountBalance < currentPrice * shares) {
+    throw new Error(
+      'You do not have enough money in your account to make this purchase.'
+    )
+  }
+}
+
 // Post routes
 
 router.post('/', async (req, res, next) => {
@@ -65,34 +73,29 @@ router.post('/', async (req, res, next) => {
     const currentUser = await User.findOne({
       where: {id: req.user.id}
     })
-    if (currentUser.accountBalance < currentPrice * shares) {
-      throw new Error(
-        'You do not have enough money in your account to make this purchase.'
+    validateUserCanAffordStock(currentUser, currentPrice, shares)
+    // 5. Create transaction
+    const newTransaction = await Transaction.create({
+      type,
+      symbol,
+      shares,
+      currentPrice
+    })
+    // 7. Create stock
+    const newStock = await Stock.createOrUpdate(symbol, shares)
+    // 8. Assign both new stock and transaction to user
+    await Promise.all([
+      newTransaction.setUser(currentUser),
+      newStock.setUser(currentUser),
+      // 7. Decrease user's accountBalance
+      User.update(
+        {
+          accountBalance: currentUser.accountBalance - currentPrice * shares
+        },
+        {where: {id: currentUser.id}}
       )
-    } else {
-      // 5. Create transaction
-      const newTransaction = await Transaction.create({
-        type,
-        symbol,
-        shares,
-        currentPrice
-      })
-      // 7. Create stock
-      const newStock = await Stock.createOrUpdate(symbol, shares)
-      // 8. Assign both new stock and transaction to user
-      await Promise.all([
-        newTransaction.setUser(currentUser),
-        newStock.setUser(currentUser),
-        // 7. Decrease user's accountBalance
-        User.update(
-          {
-            accountBalance: currentUser.accountBalance - currentPrice * shares
-          },
-          {where: {id: req.user.id}}
-        )
-      ])
-      res.status(201).json(newTransaction)
-    }
+    ])
+    res.status(201).json(newTransaction)
   } catch (err) {
     next(err)
   }
