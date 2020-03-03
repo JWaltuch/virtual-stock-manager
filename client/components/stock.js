@@ -15,10 +15,13 @@ const setStockStatus = stock => {
 export const Stock = props => {
   const {stock} = props
   const stockStatus = setStockStatus(stock)
+  const plural = stock.totalShares > 1 ? 's' : ''
   return (
     <div className={`line-item ${stockStatus}`}>
       <div className="column">{stock.symbol}</div>
-      <div className="column">{stock.totalShares} Shares</div>
+      <div className="column">
+        {stock.totalShares} Share{plural}
+      </div>
       {/* Prices are recorded accurately but rounded for cleaner display */}
       <div className="column">
         {stock.value.toLocaleString('en-US', {
