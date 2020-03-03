@@ -100,3 +100,51 @@ router.post('/BUY', async (req, res, next) => {
     next(err)
   }
 })
+
+router.post('/SELL', async (req, res, next) => {
+  //req body will have symbol, shares, and type
+  let {symbol, type, shares} = req.body
+  shares = +shares
+  try {
+    // 1. Check if quantity is whole number
+    validateQuantity(shares)
+    // 2. Get stock data if symbol is valid
+    const stockData = await getStockData(symbol)
+    // 3. Get current price of stock
+    const currentPrice = getCurrentPrice(stockData)
+    // 4. Check if user can sell that much stock
+    const currentUser = await User.findOne({
+      where: {id: req.user.id}
+    })
+    const stockToSell = await Stock.findOne({
+      where: {symbol: symbol, userId: currentUser.id}
+    })
+    if (stockToSell.totalShares < shares) {
+      throw new Error(`You do not own that many shares of ${symbol}`)
+    }
+    // 5. Create transaction
+    const newTransaction = await Transaction.create({
+      type,
+      symbol,
+      shares,
+      currentPrice
+    })
+    // 7. Delete stock or reduce shares
+    if (stockToSell.totalShares === shares) {
+      await stockToSell.destroy()
+    } else {
+      await stockToSell.update({totalShares: stockToSell.totalShares - shares})
+    }
+    await Promise.all([
+      // 8. Assign new transaction to user
+      newTransaction.setUser(currentUser),
+      // 7. Increase user's accountBalance
+      currentUser.update({
+        accountBalance: currentUser.accountBalance + currentPrice * shares
+      })
+    ])
+    res.status(201).json(newTransaction)
+  } catch (err) {
+    next(err)
+  }
+})
