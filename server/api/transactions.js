@@ -6,6 +6,8 @@ const {User} = require('../db/models')
 const {isAfterMarketClose} = require('../../util')
 module.exports = router
 
+// Get routes
+
 router.get('/', async (req, res, next) => {
   try {
     const transactions = await Transaction.findAll({
@@ -18,7 +20,7 @@ router.get('/', async (req, res, next) => {
   }
 })
 
-// Functions for post request
+// Helper functions for post routes
 
 const getStockData = async symbol => {
   try {
@@ -39,6 +41,8 @@ const validateQuantity = shares => {
     throw new Error('Quantities must be whole numbers.')
   }
 }
+
+// Post routes
 
 router.post('/', async (req, res, next) => {
   //req body will have symbol, shares, and type
