@@ -23,7 +23,13 @@ class Portfolio extends Component {
     return (
       <div>
         {/* Prices are recorded accurately but rounded for cleaner display */}
-        <h2>Portfolio: ${portfolioValue.toFixed(2)}</h2>
+        <h2>
+          Portfolio:{' '}
+          {portfolioValue.toLocaleString('en-US', {
+            style: 'currency',
+            currency: 'USD'
+          })}
+        </h2>
         {portfolio ? (
           portfolio.map(stock => <Stock key={stock.id} stock={stock} />)
         ) : (

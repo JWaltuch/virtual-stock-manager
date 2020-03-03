@@ -13,8 +13,11 @@ export const Transaction = props => {
       </div>
       <div className="column">
         {/* Prices are recorded accurately but rounded for cleaner display */}
-        {transaction.shares} Share(s) @ $
-        {parseFloat(transaction.currentPrice).toFixed(2)}
+        {transaction.shares} Share(s) @
+        {parseFloat(transaction.currentPrice).toLocaleString('en-US', {
+          style: 'currency',
+          currency: 'USD'
+        })}
       </div>
     </div>
   )
