@@ -5,6 +5,9 @@ module.exports = router
 
 router.get('/', async (req, res, next) => {
   try {
+    console.log('process.env.NODE_ENV', process.env.NODE_ENV)
+    console.log('process.env.IEX_API', process.env.IEX_API)
+    console.log('process.env', process.env)
     let portfolio = await Stock.findAll({
       where: {userId: req.user.id},
       order: ['id']
