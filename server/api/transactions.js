@@ -34,16 +34,19 @@ const getStockData = async symbol => {
   }
 }
 
+const validateQuantity = shares => {
+  if (!Number.isInteger(shares) || shares <= 0) {
+    throw new Error('Quantities must be whole numbers.')
+  }
+}
+
 router.post('/', async (req, res, next) => {
   //req body will have symbol, shares, and type
   let {symbol, type, shares} = req.body
   shares = +shares
   try {
     // 1. check if quantity is whole number
-    console.log(typeof shares)
-    if (!Number.isInteger(shares) || shares <= 0) {
-      throw new Error('Quantities must be whole numbers.')
-    }
+    validateQuantity(shares)
     // 2. check if symbol is valid
     const stockData = await getStockData(symbol)
     // 3. get current price of stock and convert to cents
