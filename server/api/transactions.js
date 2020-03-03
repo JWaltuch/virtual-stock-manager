@@ -69,15 +69,17 @@ router.post('/', async (req, res, next) => {
       // 7. create stock
       const newStock = await Stock.createOrUpdate(symbol, shares)
       // 8. assign both new stock and transaction to user
-      await newTransaction.setUser(currentUser)
-      await newStock.setUser(currentUser)
-      // 7. decrease user's accountBalance
-      await User.update(
-        {
-          accountBalance: currentUser.accountBalance - currentPrice * shares
-        },
-        {where: {id: req.user.id}}
-      )
+      await Promise.all([
+        newTransaction.setUser(currentUser),
+        newStock.setUser(currentUser),
+        // 7. decrease user's accountBalance
+        User.update(
+          {
+            accountBalance: currentUser.accountBalance - currentPrice * shares
+          },
+          {where: {id: req.user.id}}
+        )
+      ])
       res.status(201).json(newTransaction)
     }
   } catch (err) {
