@@ -26,8 +26,6 @@ if (process.env.NODE_ENV === 'test') {
  * Node process on process.env
  */
 if (process.env.NODE_ENV !== 'production') require('../secrets')
-if (process.env.NODE_ENV === 'test')
-  process.env.IEX_API = 'pk_6841a879f27a46139a4c67d02c7262a2'
 
 // passport registration
 passport.serializeUser((user, done) => done(null, user.id))
