@@ -26,11 +26,11 @@ class TransactionForm extends Component {
         <form onSubmit={event => this.handleSubmit(event)}>
           <div>
             <label htmlFor="symbol">Ticker Symbol: </label>
-            <input name="symbol" />
+            <input name="symbol" placeholder="Ticker Symbol" />
           </div>
           <div>
             <label htmlFor="shares">Quantity: </label>
-            <input name="shares" />
+            <input name="shares" placeholder="1" defaultValue={1} />
           </div>
           <div>
             <button type="submit">BUY</button>
