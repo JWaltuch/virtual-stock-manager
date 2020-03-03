@@ -20,15 +20,17 @@ export const UserHome = props => {
           <Portfolio />
         </div>
 
-        <h2 className="panel">
+        <div className="panel">
           {/* Prices are recorded accurately but rounded for cleaner display */}
-          Account Balance:{' '}
-          {parseFloat(accountBalance).toLocaleString('en-US', {
-            style: 'currency',
-            currency: 'USD'
-          })}
+          <h2>
+            Account Balance:{' '}
+            {parseFloat(accountBalance).toLocaleString('en-US', {
+              style: 'currency',
+              currency: 'USD'
+            })}
+          </h2>
           <TransactionForm />
-        </h2>
+        </div>
       </div>
 
       <h6 className="footer">Latest Update: {latestUpdate}</h6>
