@@ -40,7 +40,8 @@ router.post('/', async (req, res, next) => {
   shares = +shares
   try {
     // 1. check if quantity is whole number
-    if (!Number.isInteger(shares)) {
+    console.log(typeof shares)
+    if (!Number.isInteger(shares) || shares <= 0) {
       throw new Error('Quantities must be whole numbers.')
     }
     // 2. check if symbol is valid
