@@ -22,7 +22,11 @@ export const UserHome = props => {
 
         <h2 className="panel">
           {/* Prices are recorded accurately but rounded for cleaner display */}
-          Account Balance: ${parseFloat(accountBalance).toFixed(2)}
+          Account Balance:{' '}
+          {parseFloat(accountBalance).toLocaleString('en-US', {
+            style: 'currency',
+            currency: 'USD'
+          })}
           <TransactionForm />
         </h2>
       </div>
