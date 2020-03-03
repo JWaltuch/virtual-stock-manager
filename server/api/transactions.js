@@ -20,9 +20,7 @@ router.get('/', async (req, res, next) => {
 
 router.post('/', async (req, res, next) => {
   //req body will have symbol, shares, and type
-  let {symbol} = req.body
-  let {type} = req.body
-  let {shares} = req.body
+  let {symbol, type, shares} = req.body
   shares = +shares
   try {
     // 1. check if quantity is whole number
