@@ -5,7 +5,7 @@ import {Link} from 'react-router-dom'
 import {logout} from '../store'
 
 const Navbar = ({handleClick, isLoggedIn}) => (
-  <div>
+  <div className="navbar">
     <h1>
       <Link to="/home">VIRTUAL STOCK MANAGER</Link>
     </h1>

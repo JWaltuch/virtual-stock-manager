@@ -17,6 +17,14 @@ nav a {
   margin: 1em;
 }
 
+.navbar {
+  background-color: rgb(220, 217, 217);
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 h2 {
   display: flex;
   justify-content: center;
