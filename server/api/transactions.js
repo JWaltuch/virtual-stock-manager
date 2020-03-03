@@ -42,6 +42,12 @@ const validateQuantity = shares => {
   }
 }
 
+const getCurrentPrice = stockData => {
+  return isAfterMarketClose(new Date())
+    ? stockData.latestPrice
+    : stockData.iexRealtimePrice
+}
+
 // Post routes
 
 router.post('/', async (req, res, next) => {
@@ -49,15 +55,13 @@ router.post('/', async (req, res, next) => {
   let {symbol, type, shares} = req.body
   shares = +shares
   try {
-    // 1. check if quantity is whole number
+    // 1. Check if quantity is whole number
     validateQuantity(shares)
-    // 2. check if symbol is valid
+    // 2. Get stock data if symbol is valid
     const stockData = await getStockData(symbol)
-    // 3. get current price of stock and convert to cents
-    const currentPrice = isAfterMarketClose(new Date())
-      ? stockData.latestPrice
-      : stockData.iexRealtimePrice
-    // 4. check if user has enough money for purchase
+    // 3. Get current price of stock
+    const currentPrice = getCurrentPrice(stockData)
+    // 4. Check if user has enough money for purchase
     const currentUser = await User.findOne({
       where: {id: req.user.id}
     })
@@ -66,20 +70,20 @@ router.post('/', async (req, res, next) => {
         'You do not have enough money in your account to make this purchase.'
       )
     } else {
-      // 5. create transaction
+      // 5. Create transaction
       const newTransaction = await Transaction.create({
         type,
         symbol,
         shares,
         currentPrice
       })
-      // 7. create stock
+      // 7. Create stock
       const newStock = await Stock.createOrUpdate(symbol, shares)
-      // 8. assign both new stock and transaction to user
+      // 8. Assign both new stock and transaction to user
       await Promise.all([
         newTransaction.setUser(currentUser),
         newStock.setUser(currentUser),
-        // 7. decrease user's accountBalance
+        // 7. Decrease user's accountBalance
         User.update(
           {
             accountBalance: currentUser.accountBalance - currentPrice * shares
