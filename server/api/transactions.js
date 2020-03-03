@@ -58,7 +58,7 @@ const validateUserCanAffordStock = (user, currentPrice, shares) => {
 
 // Post routes
 
-router.post('/', async (req, res, next) => {
+router.post('/BUY', async (req, res, next) => {
   //req body will have symbol, shares, and type
   let {symbol, type, shares} = req.body
   shares = +shares
