@@ -7,6 +7,8 @@ const app = require('../index')
 const Stock = db.model('stock')
 const User = db.model('user')
 
+if (process.env.NODE_ENV !== 'production') require('../secrets')
+
 describe('Portfolio routes', () => {
   beforeEach(() => {
     return db.sync({force: true})
