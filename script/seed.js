@@ -10,8 +10,7 @@ async function seed() {
   const user = await User.create({
     name: 'Cody King',
     email: 'cody@email.com',
-    password: '1234',
-    accountBalance: 90000000.0
+    password: '1234'
   })
 
   let transaction = await Transaction.create({
@@ -43,13 +42,13 @@ async function seed() {
   })
   await transaction.setUser(user)
 
-  let stock = await Stock.createOrUpdate('aapl', '1', 292.14)
+  let stock = await Stock.createOrUpdate('aapl', '1')
   await stock.setUser(user)
-  stock = await Stock.createOrUpdate('mu', '1', 53.955)
+  stock = await Stock.createOrUpdate('mu', '1')
   await stock.setUser(user)
-  stock = await Stock.createOrUpdate('m', '1', 12.81)
+  stock = await Stock.createOrUpdate('m', '1')
   await stock.setUser(user)
-  stock = await Stock.createOrUpdate('aapl', '1', 292.14)
+  stock = await Stock.createOrUpdate('aapl', '1')
   await stock.setUser(user)
 
   console.log(`seeded 1 user, 4 stocks, & 4 transactions`)

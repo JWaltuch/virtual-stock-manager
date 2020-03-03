@@ -1,7 +1,7 @@
 const router = require('express').Router()
 const {Stock} = require('../db/models')
 const axios = require('axios')
-const {updatedWhenMarketOpenedToday} = require('../../util')
+// const {updatedWhenMarketOpenedToday} = require('../../util')
 module.exports = router
 
 router.get('/', async (req, res, next) => {
@@ -14,21 +14,18 @@ router.get('/', async (req, res, next) => {
     //catch all promises
     let promises = portfolio.map(async stock => {
       try {
-        let stockData = await axios.get(
+        const stockData = await axios.get(
           `https://cloud.iexapis.com/stable/stock/${stock.symbol}/quote?token=${
             process.env.IEX_API
           }`
         )
-        //Check if opening price has been updated today
-        //If not, get most recent opening price and update
-        if (!updatedWhenMarketOpenedToday(stock.updatedAt, new Date())) {
-          let newOpeningPrice = stockData.data.previousClose
-
-          await Stock.update(
-            {openingPrice: newOpeningPrice},
-            {where: {id: stock.id}}
-          )
-        }
+        //Get most recent opening price and update
+        // const newOpeningPrice = stockData.data.previousClose
+        // await Stock.update(
+        //   {openingPrice: newOpeningPrice},
+        //   {where: {id: stock.id}}
+        // )
+        stock.dataValues.openingPrice = stockData.data.previousClose
         stock.dataValues.value =
           stockData.data.iexRealtimePrice * +stock.totalShares
         return stock

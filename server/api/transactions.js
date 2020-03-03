@@ -55,14 +55,8 @@ router.post('/', async (req, res, next) => {
           shares,
           currentPrice
         })
-        // 6. get the opening price for this stock
-        let openingPrice = stockData.previousClose
         // 7. create stock
-        const newStock = await Stock.createOrUpdate(
-          symbol,
-          shares,
-          openingPrice
-        )
+        const newStock = await Stock.createOrUpdate(symbol, shares)
         // 8. assign both new stock and transaction to user
         await newTransaction.setUser(currentUser)
         await newStock.setUser(currentUser)

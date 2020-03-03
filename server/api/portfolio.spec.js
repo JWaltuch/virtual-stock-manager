@@ -21,13 +21,13 @@ describe('Portfolio routes', () => {
         password: '1234',
         accountBalance: 90000000.0
       })
-      let stock = await Stock.createOrUpdate('aapl', '1', 292.14)
+      let stock = await Stock.createOrUpdate('aapl', '1')
       await stock.setUser(user)
-      stock = await Stock.createOrUpdate('mu', '1', 53.955)
+      stock = await Stock.createOrUpdate('mu', '1')
       await stock.setUser(user)
-      stock = await Stock.createOrUpdate('m', '1', 12.81)
+      stock = await Stock.createOrUpdate('m', '1')
       await stock.setUser(user)
-      stock = await Stock.createOrUpdate('aapl', '1', 292.14)
+      stock = await Stock.createOrUpdate('aapl', '1')
       await stock.setUser(user)
     })
 

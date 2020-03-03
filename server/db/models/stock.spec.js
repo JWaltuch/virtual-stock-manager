@@ -14,7 +14,7 @@ describe('Stock model', () => {
       let aapl
 
       beforeEach(async () => {
-        aapl = await Stock.createOrUpdate('aapl', 1, 2100)
+        aapl = await Stock.createOrUpdate('aapl', 1)
         aapl = aapl.dataValues
       })
 
@@ -23,7 +23,7 @@ describe('Stock model', () => {
       })
 
       it('adds shares to the stock if a stock with the same symbol exists', async () => {
-        let updatedAapl = await Stock.createOrUpdate('aapl', 1, 2100)
+        let updatedAapl = await Stock.createOrUpdate('aapl', 1)
         expect(updatedAapl.totalShares).to.be.equal(2)
       })
     })

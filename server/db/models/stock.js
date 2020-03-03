@@ -9,16 +9,12 @@ const Stock = db.define('stock', {
   totalShares: {
     type: Sequelize.INTEGER,
     allowNull: false
-  },
-  openingPrice: {
-    type: Sequelize.DECIMAL,
-    allowNull: false
   }
 })
 
 //Class method to handle updating stock quantity if purchasing more
 //shares of the same stock
-Stock.createOrUpdate = async function(symbol, shares, openingPrice) {
+Stock.createOrUpdate = async function(symbol, shares) {
   //Attempt to find Stock with the same symbol
   let existingStock = await Stock.findOne({
     where: {
@@ -29,7 +25,7 @@ Stock.createOrUpdate = async function(symbol, shares, openingPrice) {
   if (existingStock) {
     let newTotalShares = existingStock.totalShares + shares
     const [_, updatedStock] = await Stock.update(
-      {totalShares: newTotalShares, openingPrice},
+      {totalShares: newTotalShares},
       {where: {id: existingStock.id}, returning: true, plain: true}
     )
     return updatedStock
@@ -37,8 +33,7 @@ Stock.createOrUpdate = async function(symbol, shares, openingPrice) {
     //If not found, create a new stock with passed arguments
     return Stock.create({
       symbol,
-      totalShares: shares,
-      openingPrice
+      totalShares: shares
     })
   }
 }
