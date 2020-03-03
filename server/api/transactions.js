@@ -18,6 +18,22 @@ router.get('/', async (req, res, next) => {
   }
 })
 
+// Functions for post request
+
+const getStockData = async symbol => {
+  try {
+    let stockData = await axios.get(
+      `https://cloud.iexapis.com/stable/stock/${symbol}/quote?token=${
+        process.env.IEX_API
+      }`
+    )
+    return stockData.data
+  } catch (error) {
+    console.log('ERROR', error)
+    throw new Error(`${symbol} is an invalid symbol.`)
+  }
+}
+
 router.post('/', async (req, res, next) => {
   //req body will have symbol, shares, and type
   let {symbol, type, shares} = req.body
@@ -28,50 +44,40 @@ router.post('/', async (req, res, next) => {
       throw new Error('Quantities must be whole numbers.')
     }
     // 2. check if symbol is valid
-    try {
-      let stockData = await axios.get(
-        `https://cloud.iexapis.com/stable/stock/${symbol}/quote?token=${
-          process.env.IEX_API
-        }`
+    const stockData = await getStockData(symbol)
+    // 3. get current price of stock and convert to cents
+    const currentPrice = isAfterMarketClose(new Date())
+      ? stockData.latestPrice
+      : stockData.iexRealtimePrice
+    // 4. check if user has enough money for purchase
+    const currentUser = await User.findOne({
+      where: {id: req.user.id}
+    })
+    if (currentUser.accountBalance < currentPrice * shares) {
+      throw new Error(
+        'You do not have enough money in your account to make this purchase.'
       )
-      stockData = stockData.data
-      // 3. get current price of stock and convert to cents
-      let currentPrice = isAfterMarketClose(new Date())
-        ? stockData.latestPrice
-        : stockData.iexRealtimePrice
-      // 4. check if user has enough money for purchase
-      const currentUser = await User.findOne({
-        where: {id: req.user.id}
+    } else {
+      // 5. create transaction
+      const newTransaction = await Transaction.create({
+        type,
+        symbol,
+        shares,
+        currentPrice
       })
-      if (currentUser.accountBalance < currentPrice * shares) {
-        throw new Error(
-          'You do not have enough money in your account to make this purchase.'
-        )
-      } else {
-        // 5. create transaction
-        const newTransaction = await Transaction.create({
-          type,
-          symbol,
-          shares,
-          currentPrice
-        })
-        // 7. create stock
-        const newStock = await Stock.createOrUpdate(symbol, shares)
-        // 8. assign both new stock and transaction to user
-        await newTransaction.setUser(currentUser)
-        await newStock.setUser(currentUser)
-        // 7. decrease user's accountBalance
-        await User.update(
-          {
-            accountBalance: currentUser.accountBalance - currentPrice * shares
-          },
-          {where: {id: req.user.id}}
-        )
-        res.status(201).json(newTransaction)
-      }
-    } catch (error) {
-      console.log('ERROR', error)
-      throw new Error(`${symbol} is an invalid symbol.`)
+      // 7. create stock
+      const newStock = await Stock.createOrUpdate(symbol, shares)
+      // 8. assign both new stock and transaction to user
+      await newTransaction.setUser(currentUser)
+      await newStock.setUser(currentUser)
+      // 7. decrease user's accountBalance
+      await User.update(
+        {
+          accountBalance: currentUser.accountBalance - currentPrice * shares
+        },
+        {where: {id: req.user.id}}
+      )
+      res.status(201).json(newTransaction)
     }
   } catch (err) {
     next(err)
