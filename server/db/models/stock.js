@@ -28,7 +28,7 @@ Stock.createOrUpdate = async function(symbol, shares, openingPrice) {
   //If found, increase shares, and update opening price
   if (existingStock) {
     let newTotalShares = existingStock.totalShares + shares
-    const [, updatedStock] = await Stock.update(
+    const [_, updatedStock] = await Stock.update(
       {totalShares: newTotalShares, openingPrice},
       {where: {id: existingStock.id}, returning: true, plain: true}
     )
