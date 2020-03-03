@@ -1,7 +1,6 @@
 const router = require('express').Router()
 const {Stock} = require('../db/models')
 const axios = require('axios')
-// const {updatedWhenMarketOpenedToday} = require('../../util')
 module.exports = router
 
 router.get('/', async (req, res, next) => {

@@ -2,7 +2,6 @@ import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {getPortfolio} from '../store/portfolio'
 import {Stock} from './stock'
-import {updatedWhenMarketOpenedToday} from '../../util'
 
 /**
  * COMPONENT
@@ -10,17 +9,6 @@ import {updatedWhenMarketOpenedToday} from '../../util'
 class Portfolio extends Component {
   componentDidMount() {
     this.props.getPortfolio()
-  }
-
-  componentDidUpdate() {
-    // Checks if portfolio needs dynamic update, based on if
-    // most recent update was when market opened
-    if (this.props.portfolio[0]) {
-      let mostRecentUpdate = new Date(this.props.portfolio[0].updatedAt)
-      if (!updatedWhenMarketOpenedToday(mostRecentUpdate, new Date())) {
-        this.props.getPortfolio()
-      }
-    }
   }
 
   render() {
