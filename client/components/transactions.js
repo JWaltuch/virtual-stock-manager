@@ -16,7 +16,7 @@ class Transactions extends Component {
     return (
       <div>
         <h2>Transactions: </h2>
-        {transactions ? (
+        {transactions && !transactions.error ? (
           transactions.map(transaction => (
             <Transaction key={transaction.id} transaction={transaction} />
           ))
