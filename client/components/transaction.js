@@ -5,6 +5,7 @@ import React from 'react'
  */
 export const Transaction = props => {
   const {transaction} = props
+  const dateOfTransaction = new Date(transaction.createdAt).toLocaleString()
 
   return (
     <div className="line-item">
@@ -19,6 +20,7 @@ export const Transaction = props => {
           currency: 'USD'
         })}
       </div>
+      <div className="column">{dateOfTransaction}</div>
     </div>
   )
 }
